@@ -116,10 +116,10 @@ function draw(){
 
 	// DRAW PIG
 	if(pig.x!=pig.gotoX){
-		if(pig.y>339){
+		if(pig.y>349){
 			pig.x = pig.gotoX;
 		}else{
-			pig.y = pig.y*0.9 + 340*0.1;
+			pig.y = pig.y*0.9 + 350*0.1;
 		}
 	}else{
 		pig.y = pig.y*0.9 + 290*0.1;
@@ -157,7 +157,7 @@ function draw(){
 		if(bird.y>300){
 
 			if(pig.y<291 && Math.abs(bird.x-pig.x)<30){
-				alert("WHOO");
+				//alert("WHOO");
 			}
 
 			birds.splice(i,1);
@@ -180,9 +180,20 @@ function draw(){
 	var angleBarWidth = -(arrowAngle/Math.PI)*600;
 	gctx.fillRect(0,0, angleBarWidth, 300);
 
-	// DRAW GRAPH BIRDS
+	// DRAW PIG
 	gctx.save();
 	gctx.translate(0,300/2);
+
+	gctx.fillStyle = "rgba(82,188,90,0.25)";
+	var pY = (-(pig.x-500)/500)*150;
+	var pHeight = 0;
+	if(pig.y<310){
+		pHeight = 1 - (pig.y-290)/20;
+		pHeight *= 10;
+	}
+	gctx.fillRect(0,pY-pHeight/2,600,pHeight);
+
+	// DRAW GRAPH BIRDS
 	gctx.fillStyle = "#E24848";
 	
 	gctx.beginPath();
