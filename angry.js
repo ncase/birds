@@ -1,12 +1,34 @@
+/******
+
+Two canvasses:
+- All within a 1000x600 area
+- The top graph is 600x300
+- The birds & pigs are 1000x300.
+- The velocity & sizes right now are good. (maybe double the size...)
+
+*****/
+
+Math.TAU = Math.PI*2;
+
 var canvas = document.getElementById("game");
 var ctx = canvas.getContext('2d');
 
-var bird;
+var gcanvas = document.getElementById("graph");
+var gctx = gcanvas.getContext('2d');
+
+var arrowImage = new Image();
+arrowImage.src = "arrow.png";
+
+var birdImage = new Image();
+birdImage.src = "bird.png";
+
+var birds = [];
+
 function newBird(angle){
 	angle = (angle===undefined) ? Math.random()*Math.PI : angle;
-	bird = {
+	return {
 		x:500,
-		y:600,
+		y:300,
 		vel:{
 			x:Math.cos(angle)*15,
 			y:-Math.sin(angle)*15
@@ -19,39 +41,82 @@ window.onclick = function(e){
 
 	var canvasX = e.clientX - canvas.offsetLeft;
 	var canvasY = e.clientY - canvas.offsetTop;
-	if(canvasY>600) canvasY=600;
+	if(canvasY>300) canvasY=300;
 	var x = canvasX-500;
-	var y = -(canvasY-600);
+	var y = -(canvasY-300);
 	var angle = Math.atan2(y,x);
 
-	newBird(angle);
+	offsetY = 50;
+
+	birds.push(newBird(angle));
 }
 
 function plotBird(bird){
 
-	var gWidth = 600;
-	var gHeight = 300;
+	gctx.save();
+	gctx.translate(0,300/2);
+	gctx.translate((bird.angle/Math.PI)*600, -((bird.x-500)/500)*300/2);
+	gctx.fillStyle = "#E24848";
+	gctx.fillRect(-5,-5,10,10);
+	gctx.restore();
 
-	ctx.save();
-	ctx.translate((1000-gWidth)/2,gHeight/2);
-	ctx.translate((bird.angle/Math.PI)*gWidth, -((bird.x-500)/500)*gHeight/2);
-	ctx.fillStyle = "#000";
-	ctx.fillRect(-5,-5,10,10);
-	ctx.restore();
 }
 
 var RAF = window.requestAnimationFrame;
+var offsetY = 0;
 function draw(){
 
-	if(bird && bird.y<=600){
-		ctx.fillStyle = "#CC2727";
-		ctx.fillRect(bird.x-10,bird.y-10,20,20);
+	ctx.clearRect(0,0,1000,300);
 
+	// DRAW ARROW
+	ctx.save();
+	ctx.translate(500,300);
+	var dx = (Mouse.x-canvas.offsetLeft) - 500;
+	var dy = (Mouse.y-canvas.offsetTop) - 300;
+	if(dy>0) dy=0;
+	var angle = Math.atan2(dy,dx);
+	ctx.rotate(angle);
+	ctx.drawImage(arrowImage,-30,-30,200,60);
+	ctx.restore();
+
+	// DRAW ARROW'S BIRD
+	ctx.save();
+	ctx.translate(500,300+offsetY);
+	offsetY = offsetY*0.9;
+	ctx.rotate(angle);
+	if(dx<0){
+		ctx.scale(1,-1);
+	}
+	ctx.drawImage(birdImage,-25,-25,50,50);
+	ctx.restore();
+
+	// DRAW BIRDS
+	for(var i=0;i<birds.length;i++){
+
+		var bird = birds[i];
+		
+		// UPDATE
 		bird.x += bird.vel.x;
 		bird.y += bird.vel.y;
 		bird.vel.y += 0.5;
 
-		if(bird.y>600){
+		// DRAW
+		ctx.save();
+		ctx.translate(bird.x,bird.y);
+		var angle = Math.atan2(bird.vel.y,bird.vel.x);
+		ctx.rotate(angle);
+		if(bird.vel.x<0){
+			ctx.scale(1,-1);
+		}
+		var mag = Math.sqrt(bird.vel.x*bird.vel.x + bird.vel.y*bird.vel.y)*0.1;
+		if(mag<1) mag=1;
+		ctx.scale(mag,1/mag);
+		ctx.drawImage(birdImage,-25,-25,50,50);
+		ctx.restore();
+
+		// KILL
+		if(bird.y>300){
+			birds.splice(i,1);
 			plotBird(bird);
 		}
 	}

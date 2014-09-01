@@ -1,14 +1,28 @@
 <style>
 body{
 	margin:0;
+	background: #FFF;
+}
+#container{
+	position: absolute;
+	width:1000px;
+	height: 605px;
 	background: #333;
 }
+#graph{
+	border: 2px solid #888;
+	margin:0 auto;
+	display: block;
+}
 #game{
-	position: absolute;
-	top:0; bottom:0; right:0; left:0;
-	margin:auto;
-	/*border: 1px solid black;*/
+	
 }
 </style>
-<canvas id="game" width="1000" height="600"></canvas>
+
+<div id="container">
+	<canvas id="graph" width="600" height="300"></canvas>
+	<canvas id="game" width="1000" height="300"></canvas>
+</div>
+
+<script src="Mouse.js"></script>
 <script src="angry.js"></script>
