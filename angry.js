@@ -22,7 +22,24 @@ arrowImage.src = "arrow.png";
 var birdImage = new Image();
 birdImage.src = "bird.png";
 
+var pigImage = new Image();
+pigImage.src = "pig.png";
+
+
 var birds = [];
+
+
+var pig = {
+	x:-100,
+	y:290,
+	gotoX:-100
+};
+function movePig(){
+	var newX = Math.random()*300+150;
+	var flip = (pig.gotoX<500) ? 1 : -1;
+	pig.gotoX = flip*newX+500;
+	console.log(pig.gotoX);
+}
 
 function newBird(angle){
 	angle = (angle===undefined) ? Math.random()*Math.PI : angle;
@@ -64,14 +81,24 @@ function draw(){
 
 	ctx.clearRect(0,0,1000,300);
 
-	// DRAW ARROW
-	ctx.save();
-	ctx.translate(500,300);
+	// ARROW ANGLE
 	var dx = (Mouse.x-canvas.offsetLeft) - 500;
 	var dy = (Mouse.y-canvas.offsetTop) - 300;
 	if(dy>0) dy=0;
 	var angle = Math.atan2(dy,dx);
 	var arrowAngle = angle;
+
+	// DRAW ARROW ANGLE
+	ctx.fillStyle = "rgba(226,72,72,0.25)";
+	ctx.beginPath();
+	ctx.moveTo(500,300);
+	ctx.arc(500, 300, 100, 0, arrowAngle, true);
+	ctx.lineTo(500,300);
+	ctx.fill();
+
+	// DRAW ARROW
+	ctx.save();
+	ctx.translate(500,300);
 	ctx.rotate(angle);
 	ctx.drawImage(arrowImage,-30,-30,200,60);
 	ctx.restore();
@@ -86,6 +113,21 @@ function draw(){
 	}
 	ctx.drawImage(birdImage,-25,-25,50,50);
 	ctx.restore();
+
+	// DRAW PIG
+	if(pig.x!=pig.gotoX){
+		if(pig.y>339){
+			pig.x = pig.gotoX;
+		}else{
+			pig.y = pig.y*0.9 + 340*0.1;
+		}
+	}else{
+		pig.y = pig.y*0.9 + 290*0.1;
+		if(pig.y<291){
+			pig.y=290;
+		}
+	}
+	ctx.drawImage(pigImage, pig.x-25, pig.y-25, 50, 50);
 
 	// DRAW BIRDS
 	for(var i=0;i<birds.length;i++){
@@ -113,7 +155,13 @@ function draw(){
 
 		// KILL
 		if(bird.y>300){
+
+			if(pig.y<291 && Math.abs(bird.x-pig.x)<30){
+				alert("WHOO");
+			}
+
 			birds.splice(i,1);
+			movePig();
 		}
 	}
 
