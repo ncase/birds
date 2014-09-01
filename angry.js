@@ -48,18 +48,14 @@ window.onclick = function(e){
 
 	offsetY = 50;
 
-	birds.push(newBird(angle));
+	var bird = newBird(angle);
+	birds.push(bird);
+	plotBird(bird);
 }
 
+var graphBirds = [];
 function plotBird(bird){
-
-	gctx.save();
-	gctx.translate(0,300/2);
-	gctx.translate((bird.angle/Math.PI)*600, -((bird.x-500)/500)*300/2);
-	gctx.fillStyle = "#E24848";
-	gctx.fillRect(-5,-5,10,10);
-	gctx.restore();
-
+	graphBirds.push(bird);
 }
 
 var RAF = window.requestAnimationFrame;
@@ -75,6 +71,7 @@ function draw(){
 	var dy = (Mouse.y-canvas.offsetTop) - 300;
 	if(dy>0) dy=0;
 	var angle = Math.atan2(dy,dx);
+	var arrowAngle = angle;
 	ctx.rotate(angle);
 	ctx.drawImage(arrowImage,-30,-30,200,60);
 	ctx.restore();
@@ -117,9 +114,42 @@ function draw(){
 		// KILL
 		if(bird.y>300){
 			birds.splice(i,1);
-			plotBird(bird);
 		}
 	}
+
+	// DRAW GRAPH
+	gctx.clearRect(0,0,600,300);
+	gctx.strokeStyle = "#888";
+	gctx.lineWidth = 2;
+	gctx.beginPath();
+	gctx.moveTo(0,150);
+	gctx.lineTo(600,150);
+	gctx.stroke();
+
+	// DRAW GRAPH ANGLE
+	gctx.fillStyle = "rgba(226,72,72,0.25)";
+	if(arrowAngle>=Math.PI) arrowAngle-=Math.TAU;
+	var angleBarWidth = -(arrowAngle/Math.PI)*600;
+	gctx.fillRect(0,0, angleBarWidth, 300);
+
+	// DRAW GRAPH BIRDS
+	gctx.save();
+	gctx.translate(0,300/2);
+	gctx.fillStyle = "#E24848";
+	
+	gctx.beginPath();
+	gctx.arc(angleBarWidth, 0, 5, 0, Math.TAU, false);
+	gctx.fill();
+
+	for(var i=0;i<graphBirds.length;i++){
+		var gb = graphBirds[i];
+		var gbx = (gb.angle/Math.PI)*600;
+		var gby = -((gb.x-500)/500)*300/2;
+		gctx.beginPath();
+		gctx.arc(gbx, gby, 5, 0, Math.TAU, false);
+		gctx.fill();
+	}
+	gctx.restore();
 
 	RAF(draw);
 }
