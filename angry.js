@@ -10,6 +10,8 @@ Two canvasses:
 
 Math.TAU = Math.PI*2;
 
+var container = document.getElementById("container");
+
 var canvas = document.getElementById("game");
 var ctx = canvas.getContext('2d');
 
@@ -94,8 +96,8 @@ window.onload = function(){
 
 	window.onclick = function(e){
 
-		var canvasX = e.clientX - canvas.offsetLeft;
-		var canvasY = e.clientY - canvas.offsetTop;
+		var canvasX = e.clientX - canvas.offsetLeft - container.offsetLeft;
+		var canvasY = e.clientY - canvas.offsetTop - container.offsetTop;
 		if(canvasY>300) canvasY=300;
 		var x = canvasX-500;
 		var y = -(canvasY-300);
@@ -120,8 +122,8 @@ window.onload = function(){
 		ctx.clearRect(0,0,1000,300);
 
 		// ARROW ANGLE
-		var dx = (Mouse.x-canvas.offsetLeft) - 500;
-		var dy = (Mouse.y-canvas.offsetTop) - 300;
+		var dx = (Mouse.x-canvas.offsetLeft-container.offsetLeft) - 500;
+		var dy = (Mouse.y-canvas.offsetTop-container.offsetTop) - 300;
 		if(dy>0) dy=0;
 		var angle = Math.atan2(dy,dx);
 		var arrowAngle = angle;
@@ -233,7 +235,7 @@ window.onload = function(){
 
 		// DRAW GRAPH
 		gctx.clearRect(0,0,600,300);
-		gctx.strokeStyle = "#888";
+		gctx.strokeStyle = "#222";
 		gctx.lineWidth = 2;
 		gctx.beginPath();
 		gctx.moveTo(0,150);
