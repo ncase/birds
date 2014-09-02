@@ -1,40 +1,81 @@
-<style>
-body{
-	margin:0;
-	background: #333;
-}
-#container{
-	position: absolute;
-	top:0; bottom:0; left:0; right:0;
-	margin:auto;
-	width:1000px;
-	height: 605px;
-	border-bottom: 4px solid #222;
-}
-#graph{
-	border: 2px solid #222;
-	margin:0 auto;
-	display: block;
-}
-#game{
-	
-}
-</style>
+<!doctype>
+<html>
+<head>
 
-<div id="container">
-	<canvas id="graph" width="600" height="300"></canvas>
-	<canvas id="game" width="1000" height="300"></canvas>
-</div>
+	<title>ANGRY PHYSICS</title>
 
-<span style="display:none">
-	<img src="img/arrow.png" id="arrow"/>
-	<img src="img/bird.png" id="bird"/>
-	<img src="img/pig.png" id="pig"/>
-	<img src="img/bacon1.png" id="bacon1"/>
-	<img src="img/bacon2.png" id="bacon2"/>
-	<img src="img/egg1.png" id="egg1"/>
-	<img src="img/egg2.png" id="egg2"/>
-</span>
+	<style>
+	body{
+		margin:0;
+		background: #333;
+	}
+	#container{
+		position: absolute;
+		top:0; bottom:0; left:0; right:0;
+		margin:auto;
+		width:1000px;
+		height: 605px;
+		border-bottom: 4px solid #222;
+	}
+	#graph{
+		border: 2px solid #000;
+		margin:0 auto;
+		display: block;
+	}
+	#container > span{
+		font-family: sans-serif;
+		font-weight: 100;
+		position: absolute;
+		color:#000;
+		font-size: 24px;
 
-<script src="Mouse.js"></script>
-<script src="angry.js"></script>
+		-webkit-user-select: none;  /* Chrome all / Safari all */
+		-moz-user-select: none;     /* Firefox all */
+		-ms-user-select: none;      /* IE 10+ */
+
+		/* No support for these yet, use at own risk */
+		-o-user-select: none;
+		user-select: none;  
+		cursor: default;
+	}
+	#container > span.rotate{
+		-webkit-transform:rotate(-90deg);
+		-moz-transform:rotate(-90deg);
+		-ms-transform:rotate(-90deg);
+		-o-transform:rotate(-90deg);
+		transform:rotate(-90deg);
+
+	}
+	</style>
+
+</head>
+<body>
+	<div id="container">
+		<!--span style="top:150px; right:205px">τ<span style="font-size:0.8em">/2</span></span-->
+		<span class="rotate" style="top: 212px;left: 150px;">←left</span>
+		<span class="rotate" style="top: 64px;left: 139px;/* top: 65px; */">right→</span>
+		<span style="top:310px; left:205px;">0</span>
+		<span style="top:305px; right:205px; font-size:30px">τ</span>
+		<span style="top:310px; left:460px;">angle→</span>
+		<canvas id="graph" width="600" height="300"></canvas>
+		<canvas id="game" width="1000" height="300"></canvas>
+	</div>
+
+	<span style="display:none">
+		<img src="img/arrow.png" id="arrow"/>
+		<img src="img/bird.png" id="bird"/>
+		<img src="img/pig.png" id="pig"/>
+		<img src="img/bacon1.png" id="bacon1"/>
+		<img src="img/bacon2.png" id="bacon2"/>
+		<img src="img/egg1.png" id="egg1"/>
+		<img src="img/egg2.png" id="egg2"/>
+	</span>
+
+	<a href="https://github.com/ncase/birds">
+	<img style="position: absolute; top: 0; right: 0; border: 0;" src="github.png" alt="Fork me on GitHub">
+	</a>
+
+	<script src="Mouse.js"></script>
+	<script src="angry.js"></script>
+</body>
+</html>

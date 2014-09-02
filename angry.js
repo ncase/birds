@@ -270,6 +270,7 @@ window.onload = function(){
 
 		for(var i=0;i<graphBirds.length;i++){
 			var gb = graphBirds[i];
+			if(gb.angle<=-Math.PI) gb.angle+=Math.TAU; // edge case
 			var gbx = (gb.angle/Math.PI)*600;
 			var gby = -((gb.x-500)/500)*300/2;
 			gctx.beginPath();
